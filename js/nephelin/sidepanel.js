@@ -32,7 +32,11 @@ function SidePanelBuilder() {
         var canvas = getCanvas();
         var board = new Board(7, 40, 'oddRowMap');
         turnKeys();
-        canvas.addEventListener('click', function(e){ boardClickListener(e, board)}, false);
+        var isDown = false;
+        var mousedown = null;
+        canvas.addEventListener('mousedown', function(e) {console.log(e); mousedown = e;isDown = true;}, false);
+        canvas.addEventListener('mousemove', function(e) {if (isDown) console.log(e.offsetX)}, false);
+        canvas.addEventListener('mouseup', function(e) {if (isDown) {console.log(e); isClick(board, mousedown, e);isDown = false;}}, false);
         drawMap(canvas.getContext('2d'), board.map);
     };
     return new Component();
@@ -44,6 +48,13 @@ ping = function() {
     ping["receiver"] = "SidePanelController";
     ping["action"] = "Ping";
     return ping;
+};
+
+isClick = function(board, mousedown, mouseup) {
+  if (mousedown.offsetX == mouseup.offsetX && mousedown.offsetY == mouseup.offsetY ) {
+      console.log("Wooop Wooop!!");
+      boardClickListener(mouseup, board);
+  }
 };
 
 function getCanvas() {
