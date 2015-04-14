@@ -1,11 +1,13 @@
+'use strict';
 /**
  * @param columnSize
  * @param hexagonSideSize
  * @param mapType
  * @constructor
  */
-var hexagon_module = require('./Hexagon');
+var Hexagon = require('./Hexagon');
 var mapgen = require('./MapGenerators');
+var HexagonAlgebra = require('./HexagonAlgebra');
 var Board;
 Board =  function Board(columnSize, hexagonSideSize, mapType) {
 
@@ -21,12 +23,12 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             break;
     }
 };
-module.exports.Board = Board;
+module.exports = Board;
 
 
 function drawHexagonGrid(ctx, map) {
     for(var coordinate_hexagon in map) {
-        hexagon_module.drawHexagon(ctx, map[coordinate_hexagon]);
+        Hexagon.drawHexagon(ctx, map[coordinate_hexagon]);
     }
 }
 
@@ -40,20 +42,23 @@ module.exports.drawMap = function drawMap(ctx, map) {
     // drawForeground(ctx);
 };
 
+Board.prototype = {
+    handlers: {
+        click: function boardClickListener(e, board) {
+            //Todo refactor to be independent of click event
+            console.log('click_offset: ' + e.offsetX + '/' + e.offsetY);
+            var click_point = new HexagonAlgebra.Axial(e.offsetX, e.offsetY);
+            var coordinate = HexagonAlgebra.pixelToCube(click_point, board.hexagonSideSize);
+            if (typeof board.map[coordinate] !== 'undefined') {
+                console.log("It's a hit!");
+                console.log(board.map[coordinate]);
+            } else {
+                console.log("No hit!");
+            }
+        }
+    }
+};
 
-
-//boardClickListener = function(e, board) {
-//    //Todo refactor to be independent of click event
-//    console.log('click_offset: ' + e.offsetX + '/' + e.offsetY);
-//    var click_point = new Axial(e.offsetX, e.offsetY);
-//    var coordinate = pixelToCube(click_point, board.hexagonSideSize);
-//    if (typeof board.map[coordinate] !== 'undefined') {
-//        console.log("It's a hit!");
-//        console.log(board.map[coordinate]);
-//    } else {
-//        console.log("No hit!");
-//    }
-//};
 
 // Test key movement (catch arrow key events)
 //turnKeys = function() {

@@ -34,17 +34,18 @@ ClientSessionController     = function ClientSessionController(contextpath) {
             self.send(response);
         },
         relay: function relay(msg) {
+            console.log('Begin Relay');
             console.log(msg);
             var receiver = msg.receiver;
-            console.log(receiver);
-            console.log(components);
-            for (var i = 0; i < components.length; i=+1) {
+            console.log('Relay to: ' + receiver);
+            for (var i = 0; i < components.length; i+=1) {
                 console.log(components[i].module);
                 if (components[i].module === receiver) {
-                    console.log("Endpoint: " + receiver + " reached.");
+                    console.log("Module: " + receiver + " reached.");
                     components[i].receive(msg);
                 }
             }
+            console.log('End Relay');
         }
     };
 };
@@ -52,11 +53,9 @@ ClientSessionController     = function ClientSessionController(contextpath) {
 
 ClientSessionController.prototype  = {
     send : function (msg) {
-    console.log(msg);
     this.socket.send(JSON.stringify(msg));
     },
     receive: function receive(event) {
-        console.log(this);
         console.log(event);
         var msg        = JSON.parse(event.data);
         var command = this.commands[msg.cmd];
@@ -80,7 +79,7 @@ ClientSessionController.prototype  = {
     },
     buildComponents: function buildComponents() {
         console.log("Found: " + receivers.length + " components.");
-        for (var index = 0; index < receivers.length; index = +1) {
+        for (var index = 0; index < receivers.length; index+=1) {
             var CmpBuilder = receivers[index];
             var cmp        = new CmpBuilder(this.send, this.socket);
             components.push(cmp);

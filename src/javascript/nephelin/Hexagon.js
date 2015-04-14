@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Created by sirmonkey on 4/2/15.
  */
@@ -23,11 +24,11 @@ Hexagon = function Hexagon(coordinate, hexagonSideSize) {
     this.corners    = hexalgebra.hex_corners(this.center, hexagonSideSize);
     this.size = hexagonSideSize;
     this.bgImg = new Image();
-    this.bgImg.src = "img/normal.png";
+    this.bgImg.src = "images/normal.png";
     this.foregroundImg = null;
     this.bordersColor = ['black','black','black','black','black','black'];
-}
-module.exports.Hexagon = Hexagon;
+};
+module.exports = Hexagon;
 
 
 /**
@@ -68,7 +69,7 @@ function drawHexagonSide(ctx , first, second, color) {
 function drawHexagonSides(ctx, hex) {
     //TODO: Refactor
     ctx.save();
-    for (var i = 0; i < hex.bordersColor.length; i++) {
+    for (var i = 0; i < hex.bordersColor.length; i+=1) {
         var second = hex.corners[(i+1) % hex.bordersColor.length];
         drawHexagonSide(ctx,hex.corners[i],second, hex.bordersColor[i]);
     }
@@ -149,10 +150,11 @@ function drawTestGrid(ctx, hex) {
  * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
  * @param hex
  */
-function drawHexagon(ctx, hex) {
+module.exports.drawHexagon = function drawHexagon(ctx, hex) {
     drawHexagonBackground(ctx, hex);
     drawHexagonSides(ctx, hex);
     //drawTestGrid(ctx, hex);
     drawForeground(ctx, hex);
-}
+};
+
 

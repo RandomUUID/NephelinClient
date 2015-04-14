@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Created by sirmonkey on 4/13/15.
  */
@@ -8,6 +9,8 @@
  * @param second
  * @returns {number}
  */
+
+var scalarCrossProduct;
 scalarCrossProduct = function (first, second) {
     return (first.q - second.q ) * (first.r - second.r);
 };
@@ -24,6 +27,7 @@ Axial = function Axial(q, r){
     this.q = q;
     this.r = r;
 };
+module.exports.Axial = Axial;
 
 
 /**
@@ -40,6 +44,7 @@ Cube = function Cube(x, y, z) {
     this.y = y;
     this.z = z;
 };
+module.exports.Cube = Cube;
 
 Axial.prototype.toCubefromOffset_OddR = function() {
     var x = this.q - (this.r - (this.r % 2)) / 2;
@@ -47,6 +52,7 @@ Axial.prototype.toCubefromOffset_OddR = function() {
     var y = -x-z;
     return new Cube(x,y,z);
 };
+
 
 
 Cube.prototype.toString = function() {
@@ -70,6 +76,7 @@ Cube.prototype.toOffset_OddR = function () {
     var r = this.z;
     return new Axial(q, r);
 };
+
 /**
  * Rounds a floating point cube into the nearest integer cube.
  * @param cube
@@ -155,22 +162,21 @@ module.exports.hex_corner = hex_corner;
  */
 var hex_corners = function hex_corners(center, size) {
     var corners = [];
-    for(var i = 0; i < 6; i=+1) {
+    for(var i = 0; i < 6; i=i+1) {
         corners.push(hex_corner(center,size, i, 'pointy'));
     }
     return corners;
 };
 module.exports.hex_corners = hex_corners;
 
-var hex_neighbors;
-hex_neighbors = function(coordinate) {
+function hex_neighbors(coordinate) {
     return [new Cube(coordinate.x+1, coordinate.y-1, coordinate.z),
         new Cube(coordinate.x+1, coordinate.y, coordinate.z-1),
         new Cube(coordinate.x, coordinate.y+1, coordinate.z-1),
         new Cube(coordinate.x-1, coordinate.y+1, coordinate.z),
         new Cube(coordinate.x-1, coordinate.y, coordinate.z+1),
         new Cube(coordinate.x, coordinate.y-1, coordinate.z+1)];
-};
+}
 module.exports.hex_neighbors = hex_neighbors;
 
 
@@ -182,16 +188,17 @@ module.exports.hex_neighbors = hex_neighbors;
  * @returns {boolean} true if the point is inside and false if not.
  */
 var isPointIn = function isPointIn (point, vertices) {
-    //Todo polygon sides are marked as outside maybe implement another algorithm.
+    //Todo Algorithm that detects sides.
     var i, j;
     var found = true;
-    for (i = 0, j = vertices.length - 1; i < vertices.length && found; j = i=+1) {
+    for (i = 0, j = vertices.length - 1; i < vertices.length && found; i+=1) {
         var xProduct = (vertices[j].q - vertices[i].q) *
             (point.r - vertices[i].r) - (vertices[j].r - vertices[i].r) *
             (point.q - vertices[i].q);
         if (0 < xProduct && found) {
             found = false;
         }
+        j = i;
     }
     return found;
 };
@@ -209,15 +216,19 @@ module.exports.pixelToCube = function pixelToCube(point, size){
     var neighbors = hex_neighbors(first_candidate_coord);
     var candidates = [first_candidate_coord].concat(neighbors);
     var result = null;
-    for (var i = 0; i<candidates.length; i=+1) {
+    console.log(candidates.length);
+    for (var i = 0; i<candidates.length; i= i+1) {
+        console.log("Innerloop " + i);
         var center = hex_center(candidates[i], size);
+        console.log(center);
         if (isPointIn(point, hex_corners(center, size))) {
-            console.log("Coordinate converted");
+            console.log("Coor dinate converted");
             console.log('Candidate Nr: ' + i);
             console.log((candidates[i]));
             result = candidates[i];
             break;
         }
+        console.log('end innerloop');
     }
     return result;
 };
