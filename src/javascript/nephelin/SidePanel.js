@@ -66,11 +66,6 @@ SidePanel.prototype = {
 };
 module.exports.sp = SidePanel;
 
-module.exports.test = function () {
-    console.log("booya tobi");
-};
-
-
 //function mousedown() {
 //
 //}
