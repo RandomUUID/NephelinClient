@@ -113,7 +113,7 @@ module.exports.cube_round = cube_round;
  * @param {Number} size of the Hexagon.
  * @returns {Axial}
  */
-var hex_center = function hex_center(coordinate, size) {
+var hex_center = function hex_center(reference_point, coordinate, size) {
     //Todo Remove Magic and Unicorns
     var hex = coordinate.toOffset_OddR();
     var height = size  * 2;
@@ -126,7 +126,7 @@ var hex_center = function hex_center(coordinate, size) {
     } else if(hex.r % 2 === 1){
         x = hex.q === 0 ? width:width+width*hex.q;
     }
-    return new Axial(x, y);
+    return new Axial(x + reference_point.q, y + reference_point.r);
 };
 module.exports.hex_center = hex_center;
 
@@ -203,32 +203,31 @@ var isPointIn = function isPointIn (point, vertices) {
     return found;
 };
 module.exports.isPointIn = isPointIn;
-module.exports.pixelToCube = function pixelToCube(point, size){
+module.exports.pixelToCube = function pixelToCube(ref_point, point, size){
     //Todo Remove Magic and Unicorns
     // Magic and Unicorns -- Start
     var height = size  * 2;
     var width = Math.sqrt(3)/ 2 * height ;
-    var q = point.q/width -1/2;
-    var r = (4 * (point.r - size) ) / (3 * height );
+    console.log(ref_point);
+    var a = point.q - ref_point.q;
+    var b = point.r - ref_point.r;
+    var q = a/width -1/2;
+    var r = (4 * (b - size) ) / (3 * height );
     // Magic and Unicorns -- End
     var floatingPointCube = (new Axial(q,r)).toCubefromOffset_OddR();
     var first_candidate_coord = cube_round(floatingPointCube);
     var neighbors = hex_neighbors(first_candidate_coord);
     var candidates = [first_candidate_coord].concat(neighbors);
     var result = null;
-    console.log(candidates.length);
     for (var i = 0; i<candidates.length; i= i+1) {
-        console.log("Innerloop " + i);
-        var center = hex_center(candidates[i], size);
-        console.log(center);
+        var center = hex_center(ref_point, candidates[i], size);
         if (isPointIn(point, hex_corners(center, size))) {
-            console.log("Coor dinate converted");
+            console.log("Coordinate converted");
             console.log('Candidate Nr: ' + i);
             console.log((candidates[i]));
             result = candidates[i];
             break;
         }
-        console.log('end innerloop');
     }
     return result;
 };

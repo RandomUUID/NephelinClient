@@ -4,11 +4,12 @@
  */
 var Board = require('./Board');
 var Messages = require('./Messages');
+var HexagonAlgebra = require('./HexagonAlgebra');
 
 function isClick(board, mousedown, mouseup) {
     if (mousedown.offsetX === mouseup.offsetX &&
         mousedown.offsetY === mouseup.offsetY) {
-        board.handlers.click(mousedown,board);
+        board.handlers.click(mousedown);
     }
 }
 
@@ -18,7 +19,7 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
     var self = this;
     this.send = sendMessageFunc;
     this.socket      = socket;
-    this.module      = "sidepanel"; // TODO: Besseren namen!
+    this.name      = "sidepanel"; // TODO: Besseren namen!
     this.actions = {
         joinGame: function (msg) {
             var response  = {
@@ -32,15 +33,20 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
             var canvas    = self.getCanvas();
             var board     = new Board(7, 40, 'oddRowMap');
             //turnKeys();
-            var isDown    = false;
-            var mousedown = null;
+            var isDown    = false,
+                mousedown = null,
+                mousemove = null;
             canvas.addEventListener('mousedown', function (e) {
                 isDown = true;
                 mousedown = e;
+                mousemove = e;
             }, false);
             canvas.addEventListener('mousemove', function (e) {
                 if (isDown) {
-                    console.log(e.offsetX);
+                    var movement_vector = new HexagonAlgebra.Axial(mousemove.offsetX - e.offsetX,
+                        mousemove.offsetY - e.offsetY);
+                    mousemove = e;
+                    board.handlers.scroll(canvas, movement_vector);
                 }
             }, false);
             canvas.addEventListener('mouseup', function (e) {
@@ -49,7 +55,7 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
                     isDown = false;
                 }
             }, false);
-            Board.drawMap(canvas.getContext('2d'), board.map);
+            Board.drawMap(canvas, board.map);
             self.send(response);
         }
     };
@@ -57,6 +63,7 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
 
 SidePanel.prototype = {
     receive: function (msg) {
+        console.log("Module: " + this.name + " reached.");
         var action = msg.action;
         switch (action) {
             case "joinGame":

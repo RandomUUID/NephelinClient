@@ -8,9 +8,9 @@
  * @param {string} contextpath - Path for the websocket connection.
  */
 
-var messages = require('./Messages');
+var Messages = require('./Messages');
 var receivers    = [],
-    components   = [];
+    components   = {};
 var ClientSessionController;
 ClientSessionController     = function ClientSessionController(contextpath) {
     var self = this;
@@ -26,24 +26,18 @@ ClientSessionController     = function ClientSessionController(contextpath) {
         },
         wait: function wait(msg) {
             console.log(Date.now() + " CMD: Waiting");
-            var response = {
-                cmd: "relay",
-                receiver: "GameController",
-                action: "newGame"
-            };
-            self.send(response);
+            self.send(Messages.newGame);
         },
         relay: function relay(msg) {
             console.log('Begin Relay');
             console.log(msg);
             var receiver = msg.receiver;
             console.log('Relay to: ' + receiver);
-            for (var i = 0; i < components.length; i+=1) {
-                console.log(components[i].module);
-                if (components[i].module === receiver) {
-                    console.log("Module: " + receiver + " reached.");
-                    components[i].receive(msg);
-                }
+            var cmp = components[receiver];
+            if (typeof cmp !== 'undefined') {
+                cmp.receive(msg);
+            } else {
+                console.log('Receiver: ' + receiver + ' not found!');
             }
             console.log('End Relay');
         }
@@ -69,7 +63,7 @@ ClientSessionController.prototype  = {
         }
     },
     acknowledge: function acknowledge(msg) {
-        this.send(messages.ack(msg.receiver, msg.sender, msg.command));
+        this.send(Messages.ack(msg.receiver, msg.sender, msg.command));
     },
     openConnection: function openConnection() {
         if (this.socket === null) {
@@ -78,14 +72,13 @@ ClientSessionController.prototype  = {
         }
     },
     buildComponents: function buildComponents() {
-        console.log("Found: " + receivers.length + " components.");
+        console.log("Components found: " + receivers.length);
         for (var index = 0; index < receivers.length; index+=1) {
             var CmpBuilder = receivers[index];
             var cmp        = new CmpBuilder(this.send, this.socket);
-            components.push(cmp);
-
+            components[cmp.name] = cmp;
         }
-        console.log("Build: " + components.length + " components.");
+        console.log("Components build: " + components.length);
         console.log("----------");
     }
 };

@@ -10,7 +10,8 @@ var mapgen = require('./MapGenerators');
 var HexagonAlgebra = require('./HexagonAlgebra');
 var Board;
 Board =  function Board(columnSize, hexagonSideSize, mapType) {
-
+    var self = this;
+    this.reference_point = new HexagonAlgebra.Axial(0,0);
     this.hexagonSideSize = hexagonSideSize;
     this.columnSize = columnSize;
     this.mapType = mapType;
@@ -22,42 +23,55 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             this.map = mapgen.oddRowMap(columnSize, hexagonSideSize);
             break;
     }
+
+    this.handlers = {
+        click: function clickHandler(e) {
+            //Todo refactor to be independent of click event
+            console.log('click_offset: ' + e.offsetX + '/' + e.offsetY);
+            var click_point = new HexagonAlgebra.Axial(e.offsetX, e.offsetY);
+            var coordinate = HexagonAlgebra.pixelToCube(self.reference_point, click_point, self.hexagonSideSize);
+            if (typeof self.map[coordinate] !== 'undefined') {
+                console.log("It's a hit!");
+                console.log(self.map[coordinate]);
+            } else {
+                console.log("No hit!");
+            }
+        },
+        scroll: function scrollHandler(canvas, movement_vector) {
+            self.reference_point.q += movement_vector.q;
+            self.reference_point.r += movement_vector.r;
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            drawMap(canvas, self.map, self.reference_point);
+        }
+    };
 };
 module.exports = Board;
 
-
-function drawHexagonGrid(ctx, map) {
+function drawHexagonGrid(ctx, map, reference_point) {
     for(var coordinate_hexagon in map) {
-        Hexagon.drawHexagon(ctx, map[coordinate_hexagon]);
+        if (map.hasOwnProperty(coordinate_hexagon)) {
+            // prop is not inherited
+            var hex = map[coordinate_hexagon];
+            hex.calcPoints(reference_point);
+            Hexagon.drawHexagon(ctx, hex);
+        }
     }
 }
 
 /**
  *  *
- * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
+ * @param {CanvasRenderingContext2D} canvas - html canvas
  * @param hex
  */
-module.exports.drawMap = function drawMap(ctx, map) {
-    drawHexagonGrid(ctx, map);
+function drawMap(canvas, map, reference_point) {
+    var ctx = canvas.getContext('2d');
+    reference_point = reference_point || new HexagonAlgebra.Axial(0,0);
+    drawHexagonGrid(ctx, map, reference_point);
     // drawForeground(ctx);
-};
+}
+module.exports.drawMap = drawMap;
 
-Board.prototype = {
-    handlers: {
-        click: function boardClickListener(e, board) {
-            //Todo refactor to be independent of click event
-            console.log('click_offset: ' + e.offsetX + '/' + e.offsetY);
-            var click_point = new HexagonAlgebra.Axial(e.offsetX, e.offsetY);
-            var coordinate = HexagonAlgebra.pixelToCube(click_point, board.hexagonSideSize);
-            if (typeof board.map[coordinate] !== 'undefined') {
-                console.log("It's a hit!");
-                console.log(board.map[coordinate]);
-            } else {
-                console.log("No hit!");
-            }
-        }
-    }
-};
+
 
 
 // Test key movement (catch arrow key events)

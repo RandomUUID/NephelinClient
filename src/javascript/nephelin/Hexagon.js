@@ -4,7 +4,7 @@
  */
 
 
-var hexalgebra = require('./HexagonAlgebra');
+var HexagonAlgebra = require('./HexagonAlgebra');
 /*
  * ##############################################################################################
  * #										Hexagon												#
@@ -20,9 +20,11 @@ var hexalgebra = require('./HexagonAlgebra');
 var Hexagon;
 Hexagon = function Hexagon(coordinate, hexagonSideSize) {
     this.coordinate = coordinate;
-    this.center     = hexalgebra.hex_center(this.coordinate, hexagonSideSize);
-    this.corners    = hexalgebra.hex_corners(this.center, hexagonSideSize);
     this.size = hexagonSideSize;
+    this.center     = null;
+    this.corners    = null;
+    this.calcPoints(new HexagonAlgebra.Axial(0,0));
+
     this.bgImg = new Image();
     this.bgImg.src = "images/normal.png";
     this.foregroundImg = null;
@@ -30,6 +32,12 @@ Hexagon = function Hexagon(coordinate, hexagonSideSize) {
 };
 module.exports = Hexagon;
 
+Hexagon.prototype = {
+    calcPoints: function calcPoints(reference_point) {
+        this.center     = HexagonAlgebra.hex_center(reference_point, this.coordinate, this.size);
+        this.corners    = HexagonAlgebra.hex_corners(this.center, this.size);
+    }
+};
 
 /**
  * Creates the hexagon path for drawing.
@@ -156,5 +164,3 @@ module.exports.drawHexagon = function drawHexagon(ctx, hex) {
     //drawTestGrid(ctx, hex);
     drawForeground(ctx, hex);
 };
-
-
