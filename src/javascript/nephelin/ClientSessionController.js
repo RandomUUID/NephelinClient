@@ -52,7 +52,7 @@ ClientSessionController.prototype  = {
     receive: function receive(event) {
         console.log(event);
         var msg        = JSON.parse(event.data);
-        var command = this.commands[msg.cmd];
+        var command = this.commands[msg.command];
         if (command !== undefined) {
             if(msg.ack === 'true') {
                 this.acknowledge(msg);

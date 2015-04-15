@@ -23,7 +23,7 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
     this.actions = {
         joinGame: function (msg) {
             var response  = {
-                "cmd": "relay", "receive": "GameController",
+                "command": "relay", "receiver": "GameController",
                 "action": "joinGame",
                 "payload": msg.payload
             };

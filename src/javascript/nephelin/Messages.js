@@ -20,7 +20,7 @@ module.exports.ack = function(sender, receiver, payload) {
     return msg;
 };
 module.exports.newGame = {
-    cmd: "relay",
+    command: "relay",
     receiver: "GameController",
     action: "newGame"
 };

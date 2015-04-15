@@ -21,7 +21,9 @@
     "merge-stream": "~0.1.7",
     "pretty-hrtime": "~1.0.0",
     "vinyl-buffer": "1.0.0 ",
-    "vinyl-source-stream": "~1.1.0"
+    "vinyl-source-stream": "~1.1.0",
+    "require-dir": "0.3.0",
+    "browser-sync": "2.6.4"
   },
   "name": "NephelinClient",
   "version": "0.0.0",
