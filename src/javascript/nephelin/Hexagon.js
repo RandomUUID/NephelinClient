@@ -29,6 +29,7 @@ Hexagon = function Hexagon(coordinate, hexagonSideSize) {
     this.bgImg.src = "images/normal.png";
     this.foregroundImg = null;
     this.bordersColor = ['black','black','black','black','black','black'];
+    this.selected = false;
 };
 module.exports = Hexagon;
 
@@ -83,6 +84,7 @@ function drawHexagonSides(ctx, hex) {
     }
     ctx.restore();
 }
+module.exports.drawHexagonSides = drawHexagonSides;
 
 /**
  * Something about clipping

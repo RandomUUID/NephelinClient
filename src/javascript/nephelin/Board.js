@@ -8,6 +8,8 @@
 var Hexagon = require('./Hexagon');
 var mapgen = require('./MapGenerators');
 var HexagonAlgebra = require('./HexagonAlgebra');
+var CanvasHelper = require('./CanvasHelper');
+//TODO: getCanvas from SidePanel
 var Board;
 Board =  function Board(columnSize, hexagonSideSize, mapType) {
     var self = this;
@@ -30,8 +32,24 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             console.log('click_offset: ' + e.offsetX + '/' + e.offsetY);
             var click_point = new HexagonAlgebra.Axial(e.offsetX, e.offsetY);
             var coordinate = HexagonAlgebra.pixelToCube(self.reference_point, click_point, self.hexagonSideSize);
-            if (typeof self.map[coordinate] !== 'undefined') {
+            var hex = self.map[coordinate];
+
+
+
+            var ctx = CanvasHelper.getCanvas().getContext('2d');
+            if (typeof hex !== 'undefined') {
                 console.log("It's a hit!");
+                if(!hex.selected){
+                    hex.bordersColor=['red','red','red','red','red','red'];
+                    hex.selected = true;
+                    console.log("changetored");
+                }
+                else{
+                    hex.bordersColor=['black','black','black','black','black','black'];
+                    hex.selected = false;
+                    console.log("changetoblack");
+                }
+                Hexagon.drawHexagonSides(ctx,hex);
                 console.log(self.map[coordinate]);
             } else {
                 console.log("No hit!");

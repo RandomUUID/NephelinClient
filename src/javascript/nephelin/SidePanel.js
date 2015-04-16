@@ -5,6 +5,7 @@
 var Board = require('./Board');
 var Messages = require('./Messages');
 var HexagonAlgebra = require('./HexagonAlgebra');
+var CanvasHelper = require('./CanvasHelper');
 
 function isClick(board, mousedown, mouseup) {
     if (mousedown.offsetX === mouseup.offsetX &&
@@ -30,7 +31,7 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
 
             var disp      = JSON.stringify(msg.payload);
             $('#SidePanel').append('<p>' + disp + '<p>');
-            var canvas    = self.getCanvas();
+            var canvas    = CanvasHelper.getCanvas();
             var board     = new Board(7, 40, 'oddRowMap');
             //turnKeys();
             var isDown    = false,
@@ -72,13 +73,6 @@ SidePanel.prototype = {
             default :
                 console.log(msg);
                 this.send(Messages.ping);
-        }
-    },
-    getCanvas: function () {
-        if ($("#cv").length) {
-            return $("#cv").get(0);
-        } else {
-            console.log('Error: Canvas not found with selector #cv');
         }
     }
 
