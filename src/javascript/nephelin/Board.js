@@ -17,6 +17,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
     this.hexagonSideSize = hexagonSideSize;
     this.columnSize = columnSize;
     this.mapType = mapType;
+    this.hexagonQueue = {};
     switch (mapType) {
         case 'oddRowMap':
             this.map = mapgen.oddRowMap(columnSize, hexagonSideSize);
@@ -25,7 +26,18 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             this.map = mapgen.normalMap(columnSize, hexagonSideSize);
             break;
     }
-
+    this.actions = {
+        selectHexagon: function selectHexagon(hexagon) {
+            if(typeof self.hexagonQueue[hexagon.coordinate] === 'undefined'){
+                hexagon.bordersColor=['red','red','red','red','red','red'];
+                self.hexagonQueue[hexagon.coordinate] = hexagon;
+            }
+            else{
+                hexagon.bordersColor=['black','black','black','black','black','black'];
+                delete self.hexagonQueue[hexagon.coordinate];
+            }
+        }
+    };
     this.handlers = {
         click: function clickHandler(e) {
             //Todo refactor to be independent of click event
@@ -33,26 +45,18 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             var click_point = new HexagonAlgebra.Axial(e.offsetX, e.offsetY);
             var coordinate = HexagonAlgebra.pixel_to_hex(self.reference_point, click_point, self.hexagonSideSize);
             var hex = self.map[coordinate];
-
-
-
-            var ctx = CanvasHelper.getCanvas().getContext('2d');
+            var canvas =CanvasHelper.getCanvas()
+            var ctx = canvas.getContext('2d');
             if (typeof hex !== 'undefined') {
                 console.log("It's a hit!");
-                if(!hex.selected){
-                    hex.bordersColor=['red','red','red','red','red','red'];
-                    hex.selected = true;
-                    console.log("changetored");
-                }
-                else{
-                    hex.bordersColor=['black','black','black','black','black','black'];
-                    hex.selected = false;
-                    console.log("changetoblack");
-                }
+                self.actions.selectHexagon(hex);
                 Hexagon.drawHexagonSides(ctx,hex);
                 console.log(self.map[coordinate]);
             } else {
                 console.log("No hit!");
+            }
+            if (typeof Object.keys(self.hexagonQueue) !== 'undefined') {
+                drawMap(canvas, self.hexagonQueue, self.reference_point);
             }
         },
         scroll: function scrollHandler(canvas, movement_vector) {
@@ -60,6 +64,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             self.reference_point.r += movement_vector.r;
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             drawMap(canvas, self.map, self.reference_point);
+            drawMap(canvas, self.hexagonQueue, self.reference_point);
         }
     };
 };

@@ -59,8 +59,7 @@ module.exports.normalMap =  function normalMap(columnSize, hexagonSideSize) {
             if (Math.floor(Math.random() * 2) === 0 || stopRandom) {
                 var hexagon = new Hexagon(coordinates, hexagonSideSize);
                 hexagon.calcAltPoints(new HexagonAlgebra.Axial(0,0));
-                console.log(hexagon);
-                hex_count= hex_count + 1;
+                hex_count += 1;
                 map[coordinates]= hexagon;
             }
         }
