@@ -13,7 +13,7 @@ var CanvasHelper = require('./CanvasHelper');
 var Board;
 Board =  function Board(columnSize, hexagonSideSize, mapType) {
     var self = this;
-    this.reference_point = new HexagonAlgebra.Axial(0,0);
+    this.reference_point = new HexagonAlgebra.Axial(350,400);
     this.hexagonSideSize = hexagonSideSize;
     this.columnSize = columnSize;
     this.mapType = mapType;
@@ -22,7 +22,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             this.map = mapgen.oddRowMap(columnSize, hexagonSideSize);
             break;
         default :
-            this.map = mapgen.oddRowMap(columnSize, hexagonSideSize);
+            this.map = mapgen.normalMap(columnSize, hexagonSideSize);
             break;
     }
 
@@ -31,7 +31,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             //Todo refactor to be independent of click event
             console.log('click_offset: ' + e.offsetX + '/' + e.offsetY);
             var click_point = new HexagonAlgebra.Axial(e.offsetX, e.offsetY);
-            var coordinate = HexagonAlgebra.pixelToCube(self.reference_point, click_point, self.hexagonSideSize);
+            var coordinate = HexagonAlgebra.pixel_to_hex(self.reference_point, click_point, self.hexagonSideSize);
             var hex = self.map[coordinate];
 
 
@@ -70,7 +70,7 @@ function drawHexagonGrid(ctx, map, reference_point) {
         if (map.hasOwnProperty(coordinate_hexagon)) {
             // prop is not inherited
             var hex = map[coordinate_hexagon];
-            hex.calcPoints(reference_point);
+            hex.calcAltPoints(reference_point);
             Hexagon.drawHexagon(ctx, hex);
         }
     }
@@ -83,7 +83,7 @@ function drawHexagonGrid(ctx, map, reference_point) {
  */
 function drawMap(canvas, map, reference_point) {
     var ctx = canvas.getContext('2d');
-    reference_point = reference_point || new HexagonAlgebra.Axial(0,0);
+    reference_point = reference_point || new HexagonAlgebra.Axial(350,400);
     drawHexagonGrid(ctx, map, reference_point);
     // drawForeground(ctx);
 }

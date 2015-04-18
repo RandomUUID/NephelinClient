@@ -53,6 +53,13 @@ Axial.prototype.toCubefromOffset_OddR = function() {
     return new Cube(x,y,z);
 };
 
+Axial.prototype.toCube = function() {
+    var x = this.q;
+    var y = this.r;
+    var z = -x-y;
+    return new Cube(x, y, z);
+};
+
 
 
 Cube.prototype.toString = function() {
@@ -112,6 +119,7 @@ module.exports.cube_round = cube_round;
  * @param {Cube} coordinate
  * @param {Number} size of the Hexagon.
  * @returns {Axial}
+ * @deprecated
  */
 var hex_center = function hex_center(reference_point, coordinate, size) {
     //Todo Remove Magic and Unicorns
@@ -130,7 +138,14 @@ var hex_center = function hex_center(reference_point, coordinate, size) {
 };
 module.exports.hex_center = hex_center;
 
-
+function cubeToPixel(reference_point, coordinate, size) {
+    var axial = coordinate.toAxial(),
+        x, y;
+    x =reference_point.q + size * Math.sqrt(3) * (axial.q + axial.r/2);
+    y =reference_point.r + size * 3/2 * axial.r;
+    return new Axial(x, y);
+}
+module.exports.cubetopixel = cubeToPixel;
 
 //TODO: Better ASCII ART
 /**
@@ -231,3 +246,31 @@ module.exports.pixelToCube = function pixelToCube(ref_point, point, size){
     }
     return result;
 };
+function pixel_to_hex(ref_point, point, size){
+    //Todo Remove Magic and Unicorns
+    // Magic and Unicorns -- Start
+    var y =  point.r - (ref_point.r);
+    var x =  point.q - ( ref_point.q);
+    var r = y / ( size * 3/2 );
+    var q = x /(size * Math.sqrt(3) ) - r/2;
+    var ax = (new Axial(q,r));
+    var floatingPointCube = ax.toCube();
+    var first_candidate_coord = cube_round(floatingPointCube);
+    console.log(first_candidate_coord);
+    var neighbors = hex_neighbors(first_candidate_coord);
+    var candidates = [first_candidate_coord].concat(neighbors);
+    var result = null;
+    for (var i = 0; i<candidates.length; i= i+1) {
+        var center = cubeToPixel(ref_point, candidates[i], size);
+        if (isPointIn(point, hex_corners(center, size))) {
+            console.log("Coordinate converted");
+            console.log('Candidate Nr: ' + i);
+            console.log((candidates[i]));
+            result = candidates[i];
+            break;
+        }
+    }
+    return result;
+}
+module.exports.pixel_to_hex = pixel_to_hex;
+

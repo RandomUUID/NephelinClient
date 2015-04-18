@@ -32,7 +32,7 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
             var disp      = JSON.stringify(msg.payload);
             $('#SidePanel').append('<p>' + disp + '<p>');
             var canvas    = CanvasHelper.getCanvas();
-            var board     = new Board(7, 40, 'oddRowMap');
+            var board     = new Board(7, 40, 'normalMap');
             //turnKeys();
             var isDown    = false,
                 mousedown = null,

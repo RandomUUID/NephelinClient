@@ -23,7 +23,7 @@ Hexagon = function Hexagon(coordinate, hexagonSideSize) {
     this.size = hexagonSideSize;
     this.center     = null;
     this.corners    = null;
-    this.calcPoints(new HexagonAlgebra.Axial(0,0));
+    this.calcAltPoints(new HexagonAlgebra.Axial(0,0));
 
     this.bgImg = new Image();
     this.bgImg.src = "images/normal.png";
@@ -36,6 +36,10 @@ module.exports = Hexagon;
 Hexagon.prototype = {
     calcPoints: function calcPoints(reference_point) {
         this.center     = HexagonAlgebra.hex_center(reference_point, this.coordinate, this.size);
+        this.corners    = HexagonAlgebra.hex_corners(this.center, this.size);
+    },
+    calcAltPoints: function calcAltPoints(reference_point) {
+        this.center     = HexagonAlgebra.cubetopixel(reference_point, this.coordinate, this.size);
         this.corners    = HexagonAlgebra.hex_corners(this.center, this.size);
     }
 };
