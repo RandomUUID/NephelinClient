@@ -29,11 +29,11 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
     this.actions = {
         selectHexagon: function selectHexagon(hexagon) {
             if(typeof self.hexagonQueue[hexagon.coordinate] === 'undefined'){
-                hexagon.bordersColor=['red','red','red','red','red','red'];
+                hexagon.bgImg.src = 'images/selected.png';
                 self.hexagonQueue[hexagon.coordinate] = hexagon;
             }
             else{
-                hexagon.bordersColor=['black','black','black','black','black','black'];
+                hexagon.bgImg.src = 'images/normal.png';
                 delete self.hexagonQueue[hexagon.coordinate];
             }
         }
@@ -50,7 +50,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             if (typeof hex !== 'undefined') {
                 console.log("It's a hit!");
                 self.actions.selectHexagon(hex);
-                Hexagon.drawHexagonSides(ctx,hex);
+                Hexagon.drawHexagon(ctx,hex);
                 console.log(self.map[coordinate]);
             } else {
                 console.log("No hit!");
