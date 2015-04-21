@@ -48,7 +48,10 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
                         mousemove.offsetY - e.offsetY);
                     mousemove = e;
                     board.handlers.scroll(canvas, movement_vector);
+                    canvas.style.cursor="move";
                 }
+                else
+                    canvas.style.cursor="default";
             }, false);
             canvas.addEventListener('mouseup', function (e) {
                 if (isDown) {
