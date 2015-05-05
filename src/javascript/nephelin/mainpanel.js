@@ -14,13 +14,13 @@ function isClick(board, mousedown, mouseup) {
     }
 }
 
-var SidePanel;
-SidePanel = function SidePanel(sendMessageFunc, socket) {
-    console.log(Date.now() + " Sidepanel started.");
+var mainPanel;
+mainPanel = function mainPanel(sendMessageFunc, socket) {
+    console.log(Date.now() + " main started.");
     var self = this;
     this.send = sendMessageFunc;
     this.socket      = socket;
-    this.name      = "sidepanel"; // TODO: Besseren namen!
+    this.name      = "mainpanel";
     this.actions = {
         joinGame: function (msg) {
             var response  = {
@@ -30,7 +30,7 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
             };
 
             var disp      = JSON.stringify(msg.payload);
-            $('#SidePanel').append('<p>' + disp + '<p>');
+            $('#mainPanel').append('<p>' + disp + '<p>');
             var canvas    = CanvasHelper.getCanvas();
             var board     = new Board(7, 40, 'normalMap');
             //turnKeys();
@@ -65,7 +65,7 @@ SidePanel = function SidePanel(sendMessageFunc, socket) {
     };
 };
 
-SidePanel.prototype = {
+mainPanel.prototype = {
     receive: function (msg) {
         console.log("Module: " + this.name + " reached.");
         var action = msg.action;
@@ -80,4 +80,4 @@ SidePanel.prototype = {
     }
 
 };
-module.exports.sp = SidePanel;
+module.exports.sp = mainPanel;
