@@ -39,6 +39,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
         }
     };
 
+
     this.handlers = {
         click: function clickHandler(e) {
             //Todo refactor to be independent of click event
