@@ -9,8 +9,10 @@ module.exports = {
     }
   },
   vendor: {
-    src: src + '/javascript/vendor/**/*',
-    dest: dest + '/js/vendor'
+    js: {src: src + '/javascript/vendor/**/*',
+         dest: dest + '/js/vendor'},
+    css: {src: src + '/css/vendor/**/*',
+          dest: dest + '/css/vendor'}
   },
   images: {
     src: src + "/images/**",

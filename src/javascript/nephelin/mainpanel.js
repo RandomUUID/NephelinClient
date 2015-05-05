@@ -65,6 +65,7 @@ mainPanel = function mainPanel(sendMessageFunc, socket) {
     };
 };
 
+
 mainPanel.prototype = {
     receive: function (msg) {
         console.log("Module: " + this.name + " reached.");

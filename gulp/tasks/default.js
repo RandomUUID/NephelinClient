@@ -1,3 +1,3 @@
 var gulp = require('gulp');
 
-gulp.task('default', ['markup','browserify', 'vendor', 'css']);
+gulp.task('default', ['markup','browserify', 'vendorjs', 'vendorcss', 'css']);
