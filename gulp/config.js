@@ -21,7 +21,7 @@ module.exports = {
     dest: dest
   },
   css: {
-    src: src + "/css/**",
+    src: src + "/css",
     dest: dest + "/css"
   },
   browserify: {
