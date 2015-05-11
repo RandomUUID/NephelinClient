@@ -58,8 +58,8 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
 
 
                 //Test Menu Funktionen
-                menu.changeMenuLabel("Hexagon");
-                menu.addMenuItem("NewItem", "doSomething");
+                menu.changeMenuLabel("Hexagon", "mainmenu");
+                menu.addMenuItem("NewItem", "doSomething", "mainmenu");
                 //menu.removeMenuItem("NewItem");
 
 
