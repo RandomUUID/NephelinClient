@@ -17,7 +17,7 @@
 
 <div class="row">
     <div class="large-9 large-offset-2 columns">
-        <nav class="top-bar" data-topbar>
+        <nav class="top-bar">
             <ul class="title-area">
                 <li class="name">
                     <h1>
@@ -26,25 +26,60 @@
                         </a>
                     </h1>
                 </li>
-                <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
             </ul>
             <section class="top-bar-section">
                 <ul class="right">
-                    <li class="has-dropdown">
-                        <a href="#" class="menu-title">Menu</a>
-                        <ul class="dropdown">
-                            <li><a href="#" id="Item1" class="menuItem">Item1</a></li>
-                            <li><a href="#" id="Item2" class="menuItem">Item2</a></li>
-                            <li><a href="#" id="Item3" class="menuItem">Item3</a></li>
+                        <ul class="menu">
+                            <li>
+                                <div class="menuItem dropDown">
+                                    <div class="title">Game</div>
+                                    <ul class="items">
+                                        <li>New Game</li>
+                                        <li>Join Game</li>
+                                        <li>Leave Game</li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="menuItem dropDown">
+                                    <div class="title">Hexagon</div>
+                                    <ul class="items">
+                                        <li>select Blue</li>
+                                        <li>select Red</li>
+                                        <li>select Gray</li>
+                                    </ul>
+                                </div>
+                            </li>
                         </ul>
-                    </li>
                 </ul>
             </section>
         </nav>
+        <ul class="menu">
+            <li>
+                <div class="menuItem dropDown">
+                    Game
+                    <ul class="items">
+                        <li>New Game</li>
+                        <li>Join Game</li>
+                        <li>Leave Game</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <div class="menuItem dropDown">
+                    <ul class="items">
+                        <li>select Blue</li>
+                        <li>select Red</li>
+                        <li>select Gray</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
 
 <div class="row">
+
     <div class="large-9 large-offset-2 columns">
         <div id="mainpanel">
             <canvas id="cv" width="720" height="576">
@@ -55,7 +90,7 @@
 </div>
 
     <script src="./js/vendor/jquery.js"></script>
-    <script src="./js/vendor/foundation.min.js"></script>
+    <!-- <script src="./js/vendor/foundation.min.js"></script> -->
     <script src="./js/bundle.js"></script>
 </body>
 </html>

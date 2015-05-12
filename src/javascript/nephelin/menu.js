@@ -3,27 +3,29 @@
  */
 
 var menuLabel = document.querySelector('.menu-title');
-var menu = document.querySelector('.dropdown');
+var menu = document.querySelector('.menu');
 var menuItem = document.querySelectorAll('.menuItem');
 var menuItemArray = Array.prototype.slice.call(menuItem,0);
 
 //Todo: Überprüfen ob die ID schon vergeben ist
-module.exports.addMenuItem = function addMenuItem(name, link){
+module.exports.addMenuItem = function addMenuItem(name){
     var li = document.createElement("li");
-    var a = document.createElement("a");
+    var d = document.createElement("a");
     var node = document.createTextNode(name);
 
-    a.setAttribute("href", link);
-    a.id = name;
-    a.classList.add('menuItem');
+    $(".menuItem").click(function(){ console.log("workin"); return false; });
 
-    menuItemArray.push(a);
+    d.id = name;
+    d.classList.add('menuItem');
 
-    a.appendChild(node);
-    li.appendChild(a);
+    menuItemArray.push(d);
+
+    console.log(d);
+    d.appendChild(node);
+    li.appendChild(d);
     menu.appendChild(li);
 
-    console.log(a.id + " created")
+    console.log(d.id + " created")
 
 };
 
