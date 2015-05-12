@@ -25,7 +25,7 @@ module.exports.addMenuItem = function addMenuItem(name){
     li.appendChild(d);
     menu.appendChild(li);
 
-    console.log(d.id + " created")
+    console.log(d.id + " created");
 
 };
 
