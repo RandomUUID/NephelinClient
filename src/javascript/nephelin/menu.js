@@ -30,6 +30,7 @@ function getMenuItem(name) {
 
 }
 
+//TODO LastItem marker
 module.exports.addMenuItem = function addMenuItem(name) {
     var item = document.createElement("li");
     var drop = document.createElement("ul");
