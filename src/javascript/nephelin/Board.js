@@ -58,10 +58,10 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
 
 
                 //Test Menu Funktionen
-                menu.changeMenuLabel("Hexagon");
-                menu.addMenuItem("NewItem", "doSomething");
-                //menu.removeMenuItem("NewItem");
-
+                menu.addMenuItem("Test");
+                menu.removeMenuItem("Hexagon");
+                menu.addDropDownItem("Test", "Foo", function(){console.log("Foo Clicked");})
+                menu.removeDropDownItem("Game", "Join Game");
 
             } else {
                 console.log("No hit!");
