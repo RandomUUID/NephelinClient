@@ -3,10 +3,19 @@
  * Created by tobias on 06.05.15.
  */
 
-var menu;
 var menuItem;
 var dropDown;
 var dropDownItem;
+var Messages = require('./Messages');
+
+var menu;
+menu = function menu(sendMessageFunc, socket) {
+    console.log("Menu initialised");
+    this.send = sendMessageFunc;
+    this.socket      = socket;
+    this.name      = "menu";
+};
+
 
 function getMenu() {
     return $(".menu");
@@ -31,7 +40,7 @@ function getMenuItem(name) {
 }
 
 //TODO LastItem marker
-module.exports.addMenuItem = function addMenuItem(name) {
+function addMenuItem(name) {
     var item = document.createElement("li");
     var drop = document.createElement("ul");
     item.innerHTML = name;
@@ -40,17 +49,17 @@ module.exports.addMenuItem = function addMenuItem(name) {
     drop.classList.add('dropDown');
     item.appendChild(drop);
     getMenu().append(item);
-};
+}
 
-module.exports.removeMenuItem = function removeMenuItem(name) {
+function removeMenuItem(name) {
     try {
         getMenuItem(name).remove();
     } catch (e) {
         console.log("Cannot remove " + name);
     }
-};
+}
 
-module.exports.addDropDownItem = function addDropDownItem(menuItem, name, f) {
+function addDropDownItem(menuItem, name, f) {
     try {
         var drop = $("." + menuItem);
         var li = document.createElement("li");
@@ -61,9 +70,9 @@ module.exports.addDropDownItem = function addDropDownItem(menuItem, name, f) {
     } catch (e) {
         console.log("Cannot find " + menuItem);
     }
-};
+}
 
-module.exports.removeDropDownItem = function removeDropDownItem(menuItem, name) {
+function removeDropDownItem(menuItem, name) {
     try {
         var drop = $("." + menuItem + " li");
         console.log(drop);
@@ -76,7 +85,33 @@ module.exports.removeDropDownItem = function removeDropDownItem(menuItem, name) 
     } catch (e) {
         console.log(e.message);
     }
+}
+
+menu.prototype = {
+    receive: function (msg) {
+        console.log("Module: " + this.name + " reached.");
+        var action = msg.action;
+        var p = msg.payload;
+        switch (action) {
+            case "addMenuItem":
+                this.addMenuItem(msg.payload);
+                break;
+            case "removeMenuItem":
+                this.removeMenuItem(msg.payload);
+                break;
+            case "addDropDownItem":
+                this.addMenuItem(p.menuItem, p.name, p.f);
+                break;
+            case "removeDropDownItem":
+                this.addMenuItem(p.menuItem, p.name);
+                break;
+            default :
+                console.log(msg);
+                this.send(Messages.ping);
+        }
+    }
 };
+module.exports.Menu = menu;
 
 
 /*
