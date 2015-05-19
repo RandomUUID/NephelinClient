@@ -22,6 +22,13 @@ menu = function menu(sendMessageFunc, socket) {
     addDropDownItem("Game", "Exit Game", function(){
        console.log("exiting Game now");
     });
+    addMenuItem("Hexagon");
+    addDropDownItem("Hexagon", "Select All", function(){
+        alert("Selected All");
+    });
+    addDropDownItem("Hexagon", "Deselect All", function(){
+        console.log("Deselected All");
+    });
 };
 
 
