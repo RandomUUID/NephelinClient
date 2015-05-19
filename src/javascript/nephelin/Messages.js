@@ -24,3 +24,9 @@ module.exports.newGame = {
     receiver: "GameController",
     action: "newGame"
 };
+
+module.exports.showContextMenu = {
+    command:"relay",
+    receiver: "context",
+    action: "showContextMenu"
+};
