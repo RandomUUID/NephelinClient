@@ -9,6 +9,7 @@ var Hexagon = require('./Hexagon');
 var mapgen = require('./MapGenerators');
 var HexagonAlgebra = require('./HexagonAlgebra');
 var CanvasHelper = require('./CanvasHelper');
+var context = require('./context');
 //TODO: getCanvas from SidePanel
 var Board;
 Board =  function Board(columnSize, hexagonSideSize, mapType) {

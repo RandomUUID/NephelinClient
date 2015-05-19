@@ -1,0 +1,43 @@
+.context-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+  padding: 0px;
+  display: none;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-family: sans-serif;
+  transition: all 0.3s;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+  -moz-box-shadow:0 0 5px #999;
+  -webkit-box-shadow:0 0 5px #999;
+  box-shadow:0 0 5px #999;
+}
+.context-item {
+  margin: 2px 2px;
+  padding: 2px 2px;
+  text-decoration: none;
+  cursor: pointer;
+
+
+  &:hover {
+    color: orangered;
+  }
+
+    a, small {
+      color: white;
+    }
+}
+
+
+.list{
+  list-style-type: none;
+  margin-bottom: 0;
+}
+
+ul {
+  margin-left: 0.5rem;
+}
