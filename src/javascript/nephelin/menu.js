@@ -14,6 +14,14 @@ menu = function menu(sendMessageFunc, socket) {
     this.send = sendMessageFunc;
     this.socket      = socket;
     this.name      = "menu";
+
+    addMenuItem("Game");
+    addDropDownItem("Game", "New Game", function(){
+       alert("New Game started");
+    });
+    addDropDownItem("Game", "Exit Game", function(){
+       console.log("exiting Game now");
+    });
 };
 
 
