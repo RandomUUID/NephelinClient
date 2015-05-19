@@ -11,9 +11,8 @@ function addContextItem(name, f) {
     var context = document.createElement("ul");
     item.innerHTML = name;
     item.classList.add("context-item");
-    item.appendChild(context);
     item.onclick = f;
-    $(".context-menu").append(item);
+    $(".context-menu .list").append(item);
 }
 
 function removeContextItem(name) {
