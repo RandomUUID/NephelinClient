@@ -109,16 +109,16 @@ menu.prototype = {
         var p = msg.payload;
         switch (action) {
             case "addMenuItem":
-                this.addMenuItem(msg.payload);
+                addMenuItem(msg.payload);
                 break;
             case "removeMenuItem":
-                this.removeMenuItem(msg.payload);
+                removeMenuItem(msg.payload);
                 break;
             case "addDropDownItem":
-                this.addMenuItem(p.menuItem, p.name, p.f);
+                addMenuItem(p.menuItem, p.name, p.f);
                 break;
             case "removeDropDownItem":
-                this.addMenuItem(p.menuItem, p.name);
+                addMenuItem(p.menuItem, p.name);
                 break;
             default :
                 console.log(msg);
