@@ -55,6 +55,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
                 self.actions.selectHexagon(hex);
                 Hexagon.drawHexagon(ctx,hex);
                 console.log(self.map[coordinate]);
+
             } else {
                 console.log("No hit!");
             }
