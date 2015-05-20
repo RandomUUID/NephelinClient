@@ -10,10 +10,13 @@ var mapgen = require('./MapGenerators');
 var HexagonAlgebra = require('./HexagonAlgebra');
 var CanvasHelper = require('./CanvasHelper');
 var context = require('./context');
+var selectImg = 'images/selectedblue.png';
+
 //TODO: getCanvas from SidePanel
 var Board;
 Board =  function Board(columnSize, hexagonSideSize, mapType) {
     var self = this;
+
     this.reference_point = new HexagonAlgebra.Axial(350,400);
     this.hexagonSideSize = hexagonSideSize;
     this.columnSize = columnSize;
@@ -30,7 +33,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
     this.actions = {
         selectHexagon: function selectHexagon(hexagon) {
             if(typeof self.hexagonQueue[hexagon.coordinate] === 'undefined'){
-                hexagon.bgImg.src = 'images/selected.png';
+                hexagon.bgImg.src = selectImg;
                 self.hexagonQueue[hexagon.coordinate] = hexagon;
             }
             else{
@@ -48,7 +51,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             var click_point = new HexagonAlgebra.Axial(e.offsetX, e.offsetY);
             var coordinate = HexagonAlgebra.pixel_to_hex(self.reference_point, click_point, self.hexagonSideSize);
             var hex = self.map[coordinate];
-            var canvas =CanvasHelper.getCanvas()
+            var canvas =CanvasHelper.getCanvas();
             var ctx = canvas.getContext('2d');
             if (typeof hex !== 'undefined') {
                 console.log("It's a hit!");
@@ -85,6 +88,15 @@ function drawHexagonGrid(ctx, map, reference_point) {
     }
 }
 
+module.exports.changeSelect = function changeSelect(color) {
+    if(color === "red") {
+        selectImg = 'images/selected.png';
+    }
+    if(color === "blue") {
+       selectImg = 'images/selectedblue.png';
+    }
+};
+
 /**
  *  *
  * @param {CanvasRenderingContext2D} canvas - html canvas
@@ -97,6 +109,7 @@ function drawMap(canvas, map, reference_point) {
     // drawForeground(ctx);
 }
 module.exports.drawMap = drawMap;
+
 
 
 

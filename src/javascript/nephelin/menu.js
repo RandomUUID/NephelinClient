@@ -14,21 +14,26 @@ menu = function menu(sendMessageFunc, socket) {
     this.send = sendMessageFunc;
     this.socket      = socket;
     this.name      = "menu";
-
-    addMenuItem("Game");
-    addDropDownItem("Game", "New Game", function(){
-       alert("New Game started");
-    });
-    addDropDownItem("Game", "Exit Game", function(){
-       console.log("exiting Game now");
-    });
-    addMenuItem("Hexagon");
-    addDropDownItem("Hexagon", "Select All", function(){
-        alert("Selected All");
-    });
-    addDropDownItem("Hexagon", "Deselect All", function(){
-        console.log("Deselected All");
-    });
+    this.actions = {
+        //TODO Funktionen == Actions?
+        init: function(){
+            console.log("Foobar init");
+            addMenuItem("Game");
+            addDropDownItem("Game", "New Game", function(){
+                alert("New Game started");
+            });
+            addDropDownItem("Game", "Exit Game", function(){
+                console.log("exiting Game now");
+            });
+            addMenuItem("Hexagon");
+            addDropDownItem("Hexagon", "Select All", function(){
+                alert("Selected All");
+            });
+            addDropDownItem("Hexagon", "Deselect All", function(){
+                console.log("Deselected All");
+            });
+        }
+    };
 };
 
 
@@ -119,6 +124,9 @@ menu.prototype = {
                 break;
             case "removeDropDownItem":
                 addMenuItem(p.menuItem, p.name);
+                break;
+            case "init":
+                this.actions.init();
                 break;
             default :
                 console.log(msg);
