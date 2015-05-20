@@ -68,5 +68,24 @@ context = function context(sendMessageFunc, socket) {
     });
 };
 
+context.prototype = {
+    receive: function (msg) {
+        console.log("Module: " + this.name + " reached.");
+        var action = msg.action;
+        var p = msg.payload;
+        switch (action) {
+            case "addContextItem":
+                addContextItem(msg.payload, function()
+                {console.log("Clicked" + msg.payload);});
+                break;
+            case "removeContextItem":
+                removeContextItem(msg.payload);
+                break;
+            default :
+                console.log(msg);
+                this.send(Messages.ping);
+        }
+    }
+};
 
 module.exports.Context = context;
