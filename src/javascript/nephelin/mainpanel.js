@@ -50,8 +50,10 @@ mainPanel = function mainPanel(sendMessageFunc, socket) {
                     board.handlers.scroll(canvas, movement_vector);
                     canvas.style.cursor="move";
                 }
-                else
+                else{
                     canvas.style.cursor="default";
+                }
+
             }, false);
             canvas.addEventListener('mouseup', function (e) {
                 if (isDown) {

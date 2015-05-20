@@ -5,6 +5,9 @@
 
 var context;
 var Messages = require('./Messages');
+var Board = require('./Board');
+var self = this;
+
 
 function addContextItem(name, f) {
     var item = document.createElement("li");
@@ -60,11 +63,16 @@ context = function context(sendMessageFunc, socket) {
         }
     });
 
+    //TODO dirty!
     addContextItem("red", function () {
         console.log("Red selected");
+        var Board = require('./Board');
+        Board.changeSelect("red");
     });
     addContextItem("blue", function () {
         console.log("Blue selected");
+        var Board = require('./Board');
+        Board.changeSelect("blue");
     });
 };
 
