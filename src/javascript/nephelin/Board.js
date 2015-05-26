@@ -17,6 +17,7 @@ var Board;
 Board =  function Board(columnSize, hexagonSideSize, mapType) {
     var self = this;
 
+    this.name = 'board';
     this.reference_point = new HexagonAlgebra.Axial(350,400);
     this.hexagonSideSize = hexagonSideSize;
     this.columnSize = columnSize;
@@ -77,7 +78,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
         }
     };
 };
-module.exports = Board;
+module.exports.Board = Board;
 
 function drawHexagonGrid(ctx, map, reference_point) {
     for(var coordinate_hexagon in map) {

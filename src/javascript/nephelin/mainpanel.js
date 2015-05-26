@@ -2,12 +2,12 @@
 /**
  * Created by sirmonkey on 4/3/15.
  */
-var Board = require('./Board');
+var ComponentHelper = require('./ComponentHelper');
 var Messages = require('./Messages');
 var HexagonAlgebra = require('./HexagonAlgebra');
 var CanvasHelper = require('./CanvasHelper');
-var receivers    = [],
-    components   = {};
+
+
 function isClick(board, mousedown, mouseup) {
     if (mousedown.offsetX === mouseup.offsetX &&
         mousedown.offsetY === mouseup.offsetY) {
@@ -15,13 +15,13 @@ function isClick(board, mousedown, mouseup) {
     }
 }
 
-var mainPanel;
-mainPanel = function mainPanel(sendMessageFunc, socket) {
+var MainPanel;
+MainPanel = function MainPanel(sendMessageFunc, socket) {
     console.log(Date.now() + " main started.");
     var self = this;
     this.send = sendMessageFunc;
     this.socket      = socket;
-    this.name      = "mainpanel";
+    this.name      = 'mainpanel';
     this.actions = {
         joinGame: function (msg) {
             var response  = {
@@ -33,7 +33,7 @@ mainPanel = function mainPanel(sendMessageFunc, socket) {
             var disp      = JSON.stringify(msg.payload);
             $('#mainPanel').append('<p>' + disp + '<p>');
             var canvas    = CanvasHelper.getCanvas();
-            var board     = new Board(7, 40, 'normalMap');
+            var board     = self.ComponentBuilder.components['board'](7, 40, 'normalMap');
             //turnKeys();
             var isDown    = false,
                 mousedown = null,
@@ -66,22 +66,33 @@ mainPanel = function mainPanel(sendMessageFunc, socket) {
             self.send(response);
         }
     };
+    this.ComponentBuilder = new ComponentHelper.ComponentBuilder(self);
 };
 
 
-mainPanel.prototype = {
-    receive: function (msg) {
-        console.log("Module: " + this.name + " reached.");
-        var action = msg.action;
-        switch (action) {
-            case "joinGame":
-                this.actions.joinGame(msg);
-                break;
-            default :
-                console.log(msg);
-                this.send(Messages.ping);
-        }
+MainPanel.prototype.receive = function receive(msg){
+    console.log("Module: " + this.name + " reached.");
+    var action = msg.action;
+    switch (action) {
+        case "joinGame":
+            this.actions.joinGame(msg);
+            break;
+        default :
+            console.log(msg);
+            this.send(Messages.ping);
     }
-
 };
-module.exports.sp = mainPanel;
+
+
+MainPanel.prototype.addComponent = function addComponent(component) {
+    this.ComponentBuilder.addComponent(component);
+};
+ClientSessionController.prototype.getComponent = function getComponent(component) {
+    return this.ComponentBuilder.components[component];
+};
+
+MainPanel.prototype.build = function build() {
+    this.ComponentBuilder.build();
+};
+
+module.exports.MainPanel = MainPanel;

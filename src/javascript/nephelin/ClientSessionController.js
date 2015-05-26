@@ -64,8 +64,11 @@ ClientSessionController.prototype.receive = function receive(event) {
         console.log("Error: Command not found!") ;
     }
 };
-ClientSessionController.prototype.addReceiver = function addReceiver(receiver) {
-    this.ComponentBuilder.addReceiver(receiver);
+ClientSessionController.prototype.addComponent = function addComponent(component) {
+    this.ComponentBuilder.addComponent(component);
+};
+ClientSessionController.prototype.getComponent = function getComponent(component) {
+    return this.ComponentBuilder.components[component];
 };
 ClientSessionController.prototype.acknowledge = function acknowledge(msg) {
     this.send(Messages.ack(msg.receiver, msg.sender, msg.command));

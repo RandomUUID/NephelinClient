@@ -9,8 +9,8 @@ ComponentBuilder = function ComponentBuilder(self) {
     this.receivers = [];
     this.components = {};
 };
-ComponentBuilder.prototype.addReceiver             = function (receiver) {
-    this.receivers.push(receiver);
+ComponentBuilder.prototype.addComponent             = function addComponent(component) {
+    this.receivers.push(component);
 };
 ComponentBuilder.prototype.build = function build() {
     console.log("Components found: " + this.receivers.length);
