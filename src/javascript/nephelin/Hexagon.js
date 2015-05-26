@@ -47,7 +47,7 @@ Hexagon.prototype = {
 /**
  * Creates the hexagon path for drawing.
  *
- * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
+ * @param {CanvasRenderingContext2D} ctx - Canvas 2d Context.
  * @param first
  * @param second
  * @param begin
@@ -76,7 +76,7 @@ function drawHexagonSide(ctx , first, second, color) {
 /**
  * Draws the Hexagon's border.
  *
- * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
+ * @param {CanvasRenderingContext2D} ctx - Canvas 2d Context.
  * @param hex
  */
 function drawHexagonSides(ctx, hex) {
@@ -109,7 +109,7 @@ function setHexagonSides(ctx, hex) {
 /**
  * Draws the Hexagon Background.
  *
- * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
+ * @param {CanvasRenderingContext2D} ctx - Canvas 2d Context.
  * @param {Hexagon} hex
  */
 function drawHexagonBackground(ctx, hex) {
@@ -159,9 +159,9 @@ function drawTestGrid(ctx, hex) {
 }
 
 /**
- * Draws the Hexagon into the given context.
+ * Draws the Hexagon into the given Context.
  *
- * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
+ * @param {CanvasRenderingContext2D} ctx - Canvas 2d Context.
  * @param hex
  */
 module.exports.drawHexagon = function drawHexagon(ctx, hex) {

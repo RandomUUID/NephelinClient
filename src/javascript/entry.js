@@ -9,11 +9,12 @@ var menu = require('./nephelin/menu');
 
 $( document ).ready(function() {
     console.log('ClientSessionController starting!');
-    var csc = new ClientSessionController.csc('/NephelinServer');
-    ClientSessionController.addReceiver(mainpanel.sp);
-    ClientSessionController.addReceiver(context.Context);
-    ClientSessionController.addReceiver(menu.Menu);
+    var csc = new ClientSessionController.ClientSessionController('/NephelinServer');
+
+    csc.addReceiver(mainpanel.sp);
+    csc.addReceiver(context.Context);
+    csc.addReceiver(menu.Menu);
     csc.openConnection();
-    csc.buildComponents();
+    csc.build();
     console.log('ClientSessionController started!');
 });

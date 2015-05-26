@@ -6,7 +6,8 @@ var Board = require('./Board');
 var Messages = require('./Messages');
 var HexagonAlgebra = require('./HexagonAlgebra');
 var CanvasHelper = require('./CanvasHelper');
-
+var receivers    = [],
+    components   = {};
 function isClick(board, mousedown, mouseup) {
     if (mousedown.offsetX === mouseup.offsetX &&
         mousedown.offsetY === mouseup.offsetY) {
