@@ -53,17 +53,19 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             var hex = self.map[coordinate];
             var canvas =CanvasHelper.getCanvas();
             var ctx = canvas.getContext('2d');
-            if (typeof hex !== 'undefined') {
-                console.log("It's a hit!");
-                self.actions.selectHexagon(hex);
-                Hexagon.drawHexagon(ctx,hex);
-                console.log(self.map[coordinate]);
+            if(e.button === 0){                                             //Leftclick = 0
+                if (typeof hex !== 'undefined' && e.button === 0) {
+                    console.log("It's a hit!");
+                    self.actions.selectHexagon(hex);
+                    Hexagon.drawHexagon(ctx,hex);
+                    console.log(self.map[coordinate]);
 
-            } else {
-                console.log("No hit!");
-            }
-            if (typeof Object.keys(self.hexagonQueue) !== 'undefined') {
-                drawMap(canvas, self.hexagonQueue, self.reference_point);
+                } else {
+                    console.log("No hit!");
+                }
+                if (typeof Object.keys(self.hexagonQueue) !== 'undefined') {
+                    drawMap(canvas, self.hexagonQueue, self.reference_point);
+                }
             }
         },
         scroll: function scrollHandler(canvas, movement_vector) {
