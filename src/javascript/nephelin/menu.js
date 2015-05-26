@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * Created by tobias on 06.05.15.
  */
@@ -7,60 +7,19 @@ var menuItem;
 var dropDown;
 var dropDownItem;
 var Messages = require('./Messages');
+var MenuHelper = require('./MenuHelper');
 
-var menu;
-menu = function menu(sendMessageFunc, socket) {
+var Menu;
+Menu = function Menu(sendMessageFunc, socket) {
+    var self = this;
     console.log("Menu initialised");
     this.send = sendMessageFunc;
     this.socket      = socket;
     this.name      = "menu";
-    this.actions = {
-        //TODO Funktionen == Actions?
-        init: function(){
-            console.log("Foobar init");
-            addMenuItem("Game");
-            addDropDownItem("Game", "New Game", function(){
-                alert("New Game started");
-            });
-            addDropDownItem("Game", "Exit Game", function(){
-                console.log("exiting Game now");
-            });
-            addMenuItem("Hexagon");
-            addDropDownItem("Hexagon", "Select All", function(){
-                alert("Selected All");
-            });
-            addDropDownItem("Hexagon", "Deselect All", function(){
-                console.log("Deselected All");
-            });
-        }
-    };
 };
 
-
-function getMenu() {
-    return $(".menu");
-}
-
-function getMenuItems() {
-    return $(".menuItem");
-}
-
-function getMenuItem(name) {
-    try {
-        var menuItems = getMenuItems();
-        for (var i = 0; i < menuItems.length; i += 1) {
-            if (menuItems[i].innerText === name) {
-                return menuItems[i];
-            }
-        }
-    } catch (e) {
-        console.log("menuItem not found: " + name);
-    }
-
-}
-
-//TODO LastItem marker
-function addMenuItem(name) {
+Menu.prototype.actions = {};
+Menu.prototype.actions.addMenuItem = function addMenuItem(name) {
     var item = document.createElement("li");
     var drop = document.createElement("ul");
     item.innerHTML = name;
@@ -68,18 +27,20 @@ function addMenuItem(name) {
     drop.classList.add(name);
     drop.classList.add('dropDown');
     item.appendChild(drop);
-    getMenu().append(item);
-}
+    MenuHelper.getMenu().append(item);
+};
 
-function removeMenuItem(name) {
+Menu.prototype.actions.removeMenutItem =
+    function removeMenuItem(name) {
     try {
-        getMenuItem(name).remove();
+        MenuHelper.getMenuItem(name).remove();
     } catch (e) {
         console.log("Cannot remove " + name);
     }
-}
+};
 
-function addDropDownItem(menuItem, name, f) {
+Menu.prototype.actions.addDropDownItem =
+    function addDropDownItem(menuItem, name, f) {
     try {
         var drop = $("." + menuItem);
         var li = document.createElement("li");
@@ -90,9 +51,10 @@ function addDropDownItem(menuItem, name, f) {
     } catch (e) {
         console.log("Cannot find " + menuItem);
     }
-}
+};
 
-function removeDropDownItem(menuItem, name) {
+Menu.prototype.actions.removeDropDownItem =
+    function removeDropDownItem(menuItem, name) {
     try {
         var drop = $("." + menuItem + " li");
         console.log(drop);
@@ -105,33 +67,50 @@ function removeDropDownItem(menuItem, name) {
     } catch (e) {
         console.log(e.message);
     }
-}
+};
+Menu.prototype.init = function init() {
+    console.log("Foobar init");
+    this.actions.addMenuItem("Game");
+    this.actions.addDropDownItem("Game", "New Game", function(){
+        alert("New Game started");
+    });
+    this.actions.addDropDownItem("Game", "Exit Game", function(){
+        console.log("exiting Game now");
+    });
+    this.actions.addMenuItem("Hexagon");
+    this.actions.addDropDownItem("Hexagon", "Select All", function(){
+        alert("Selected All");
+    });
+    this.actions.addDropDownItem("Hexagon", "Deselect All", function(){
+        console.log("Deselected All");
+    });
+};
 
-menu.prototype = {
-    receive: function (msg) {
+Menu.prototype.receive =  function receive(msg) {
         console.log("Module: " + this.name + " reached.");
         var action = msg.action;
         var p = msg.payload;
         switch (action) {
             case "addMenuItem":
-                addMenuItem(msg.payload);
+                this.actions.addMenuItem(msg.payload);
                 break;
             case "removeMenuItem":
-                removeMenuItem(msg.payload);
+                this.actions.removeMenuItem(msg.payload);
                 break;
             case "addDropDownItem":
-                addMenuItem(p.menuItem, p.name, p.f);
+                this.actions.addMenuItem(p.menuItem, p.name, p.f);
                 break;
             case "removeDropDownItem":
-                addMenuItem(p.menuItem, p.name);
+                this.actions.addMenuItem(p.menuItem, p.name);
                 break;
             case "init":
-                this.actions.init();
+                this.init();
+                console.log("Menu INIT!");
+                console.log("Menu INIT!");
                 break;
             default :
                 console.log(msg);
                 this.send(Messages.ping);
         }
-    }
 };
-module.exports.Menu = menu;
+module.exports.Menu = Menu;
