@@ -1090,7 +1090,7 @@ ClientSessionController.prototype.build = function build() {
 
 $( document ).ready(function() {
     console.log('ClientSessionController starting!');
-    var csc = new ClientSessionController('/NephelinServer');
+    var csc = new ClientSessionController('/NephelinDemo');
 
     csc.addReceiver(mainPanel);
     csc.addReceiver(Context);
