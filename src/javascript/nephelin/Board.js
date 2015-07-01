@@ -8,33 +8,64 @@
 var Hexagon = require('./Hexagon');
 var mapgen = require('./MapGenerators');
 var HexagonAlgebra = require('./HexagonAlgebra');
+var CanvasHelper = require('./CanvasHelper');
+var context = require('./context');
+var selectImg = 'images/selectedblue.png';
+
+//TODO: getCanvas from SidePanel
 var Board;
 Board =  function Board(columnSize, hexagonSideSize, mapType) {
     var self = this;
-    this.reference_point = new HexagonAlgebra.Axial(0,0);
+
+    this.reference_point = new HexagonAlgebra.Axial(350,400);
     this.hexagonSideSize = hexagonSideSize;
     this.columnSize = columnSize;
     this.mapType = mapType;
+    this.hexagonQueue = {};
     switch (mapType) {
         case 'oddRowMap':
             this.map = mapgen.oddRowMap(columnSize, hexagonSideSize);
             break;
         default :
-            this.map = mapgen.oddRowMap(columnSize, hexagonSideSize);
+            this.map = mapgen.normalMap(columnSize, hexagonSideSize);
             break;
     }
+    this.actions = {
+        selectHexagon: function selectHexagon(hexagon) {
+            if(typeof self.hexagonQueue[hexagon.coordinate] === 'undefined'){
+                hexagon.bgImg.src = selectImg;
+                self.hexagonQueue[hexagon.coordinate] = hexagon;
+            }
+            else{
+                hexagon.bgImg.src = 'images/normal.png';
+                delete self.hexagonQueue[hexagon.coordinate];
+            }
+        }
+    };
+
 
     this.handlers = {
         click: function clickHandler(e) {
             //Todo refactor to be independent of click event
             console.log('click_offset: ' + e.offsetX + '/' + e.offsetY);
             var click_point = new HexagonAlgebra.Axial(e.offsetX, e.offsetY);
-            var coordinate = HexagonAlgebra.pixelToCube(self.reference_point, click_point, self.hexagonSideSize);
-            if (typeof self.map[coordinate] !== 'undefined') {
-                console.log("It's a hit!");
-                console.log(self.map[coordinate]);
-            } else {
-                console.log("No hit!");
+            var coordinate = HexagonAlgebra.pixel_to_hex(self.reference_point, click_point, self.hexagonSideSize);
+            var hex = self.map[coordinate];
+            var canvas =CanvasHelper.getCanvas();
+            var ctx = canvas.getContext('2d');
+            if(e.button === 0){                                             //Leftclick = 0
+                if (typeof hex !== 'undefined' && e.button === 0) {
+                    console.log("It's a hit!");
+                    self.actions.selectHexagon(hex);
+                    Hexagon.drawHexagon(ctx,hex);
+                    console.log(self.map[coordinate]);
+
+                } else {
+                    console.log("No hit!");
+                }
+                if (typeof Object.keys(self.hexagonQueue) !== 'undefined') {
+                    drawMap(canvas, self.hexagonQueue, self.reference_point);
+                }
             }
         },
         scroll: function scrollHandler(canvas, movement_vector) {
@@ -42,6 +73,7 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             self.reference_point.r += movement_vector.r;
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             drawMap(canvas, self.map, self.reference_point);
+            drawMap(canvas, self.hexagonQueue, self.reference_point);
         }
     };
 };
@@ -52,11 +84,20 @@ function drawHexagonGrid(ctx, map, reference_point) {
         if (map.hasOwnProperty(coordinate_hexagon)) {
             // prop is not inherited
             var hex = map[coordinate_hexagon];
-            hex.calcPoints(reference_point);
+            hex.calcAltPoints(reference_point);
             Hexagon.drawHexagon(ctx, hex);
         }
     }
 }
+
+module.exports.changeSelect = function changeSelect(color) {
+    if(color === "red") {
+        selectImg = 'images/selected.png';
+    }
+    if(color === "blue") {
+       selectImg = 'images/selectedblue.png';
+    }
+};
 
 /**
  *  *
@@ -65,11 +106,12 @@ function drawHexagonGrid(ctx, map, reference_point) {
  */
 function drawMap(canvas, map, reference_point) {
     var ctx = canvas.getContext('2d');
-    reference_point = reference_point || new HexagonAlgebra.Axial(0,0);
+    reference_point = reference_point || new HexagonAlgebra.Axial(350,400);
     drawHexagonGrid(ctx, map, reference_point);
     // drawForeground(ctx);
 }
 module.exports.drawMap = drawMap;
+
 
 
 

@@ -23,12 +23,13 @@ Hexagon = function Hexagon(coordinate, hexagonSideSize) {
     this.size = hexagonSideSize;
     this.center     = null;
     this.corners    = null;
-    this.calcPoints(new HexagonAlgebra.Axial(0,0));
+    this.calcAltPoints(new HexagonAlgebra.Axial(0,0));
 
     this.bgImg = new Image();
     this.bgImg.src = "images/normal.png";
     this.foregroundImg = null;
     this.bordersColor = ['black','black','black','black','black','black'];
+    this.selected = false;
 };
 module.exports = Hexagon;
 
@@ -36,13 +37,17 @@ Hexagon.prototype = {
     calcPoints: function calcPoints(reference_point) {
         this.center     = HexagonAlgebra.hex_center(reference_point, this.coordinate, this.size);
         this.corners    = HexagonAlgebra.hex_corners(this.center, this.size);
+    },
+    calcAltPoints: function calcAltPoints(reference_point) {
+        this.center     = HexagonAlgebra.cubetopixel(reference_point, this.coordinate, this.size);
+        this.corners    = HexagonAlgebra.hex_corners(this.center, this.size);
     }
 };
 
 /**
  * Creates the hexagon path for drawing.
  *
- * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
+ * @param {CanvasRenderingContext2D} ctx - Canvas 2d Context.
  * @param first
  * @param second
  * @param begin
@@ -71,7 +76,7 @@ function drawHexagonSide(ctx , first, second, color) {
 /**
  * Draws the Hexagon's border.
  *
- * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
+ * @param {CanvasRenderingContext2D} ctx - Canvas 2d Context.
  * @param hex
  */
 function drawHexagonSides(ctx, hex) {
@@ -83,6 +88,7 @@ function drawHexagonSides(ctx, hex) {
     }
     ctx.restore();
 }
+module.exports.drawHexagonSides = drawHexagonSides;
 
 /**
  * Something about clipping
@@ -103,7 +109,7 @@ function setHexagonSides(ctx, hex) {
 /**
  * Draws the Hexagon Background.
  *
- * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
+ * @param {CanvasRenderingContext2D} ctx - Canvas 2d Context.
  * @param {Hexagon} hex
  */
 function drawHexagonBackground(ctx, hex) {
@@ -153,9 +159,9 @@ function drawTestGrid(ctx, hex) {
 }
 
 /**
- * Draws the Hexagon into the given context.
+ * Draws the Hexagon into the given Context.
  *
- * @param {CanvasRenderingContext2D} ctx - Canvas 2d context.
+ * @param {CanvasRenderingContext2D} ctx - Canvas 2d Context.
  * @param hex
  */
 module.exports.drawHexagon = function drawHexagon(ctx, hex) {

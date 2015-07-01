@@ -9,8 +9,7 @@
  */
 
 var Messages = require('./Messages');
-var receivers    = [],
-    components   = {};
+var ComponentHelper = require('./ComponentHelper');
 var ClientSessionController;
 ClientSessionController     = function ClientSessionController(contextpath) {
     var self = this;
@@ -33,7 +32,7 @@ ClientSessionController     = function ClientSessionController(contextpath) {
             console.log(msg);
             var receiver = msg.receiver;
             console.log('Relay to: ' + receiver);
-            var cmp = components[receiver];
+            var cmp = self.ComponentBuilder.components[receiver];
             if (typeof cmp !== 'undefined') {
                 cmp.receive(msg);
             } else {
@@ -42,52 +41,42 @@ ClientSessionController     = function ClientSessionController(contextpath) {
             console.log('End Relay');
         }
     };
+    this.ComponentBuilder = new ComponentHelper.ComponentBuilder(self);
+    console.log(this.ComponentBuilder);
 };
 
-
-ClientSessionController.prototype  = {
-    send : function (msg) {
+ClientSessionController.prototype.send =  function send(msg) {
     this.socket.send(JSON.stringify(msg));
-    },
-    receive: function receive(event) {
-        console.log(event);
-        var msg        = JSON.parse(event.data);
-        var command = this.commands[msg.command];
-        if (command !== undefined) {
-            if(msg.ack === 'true') {
-                this.acknowledge(msg);
-            }
-            command(msg);
-        } else {
-          console.log("Error: Command not found!") ;
+};
+ClientSessionController.prototype.sendLocal = function sendLocal(msg) {
+    self.receive(msg);
+};
+ClientSessionController.prototype.receive = function receive(event) {
+    console.log(event);
+    var msg        = JSON.parse(event.data);
+    var command = this.commands[msg.command];
+    if (command !== undefined) {
+        if(msg.ack === 'true') {
+            this.acknowledge(msg);
         }
-    },
-    acknowledge: function acknowledge(msg) {
-        this.send(Messages.ack(msg.receiver, msg.sender, msg.command));
-    },
-    openConnection: function openConnection() {
-        if (this.socket === null) {
-            this.socket = new WebSocket(this.connection);
-            this.socket.onmessage = this.receive.bind(this);
-        }
-    },
-    buildComponents: function buildComponents() {
-        console.log("Components found: " + receivers.length);
-        for (var index = 0; index < receivers.length; index+=1) {
-            var CmpBuilder = receivers[index];
-            var cmp        = new CmpBuilder(this.send, this.socket);
-            components[cmp.name] = cmp;
-        }
-        console.log("Components build: " + components.length);
-        console.log("----------");
+        command(msg);
+    } else {
+        console.log("Error: Command not found!") ;
     }
 };
-module.exports.csc                     = ClientSessionController;
-module.exports.addReceiver             = function (receiver) {
-    receivers.push(receiver);
+ClientSessionController.prototype.addReceiver = function addReceiver(receiver) {
+    this.ComponentBuilder.addReceiver(receiver);
 };
-
-
-module.exports.receivers = function () {
-    return receivers;
+ClientSessionController.prototype.acknowledge = function acknowledge(msg) {
+    this.send(Messages.ack(msg.receiver, msg.sender, msg.command));
 };
+ClientSessionController.prototype.openConnection = function openConnection() {
+    if (this.socket === null) {
+        this.socket = new WebSocket(this.connection);
+        this.socket.onmessage = this.receive.bind(this);
+    }
+};
+ClientSessionController.prototype.build = function build() {
+    this.ComponentBuilder.build();
+};
+module.exports.ClientSessionController                     = ClientSessionController;

@@ -1,0 +1,119 @@
+$colorscheme: #249dff;
+
+.context-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+  padding: 0px;
+  display: none;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-family: sans-serif;
+  transition: all 0.3s;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+  -moz-box-shadow:0 0 5px #999;
+  -webkit-box-shadow:0 0 5px #999;
+  box-shadow:0 0 5px #999;
+}
+.context-item {
+  margin: 2px 2px;
+  padding: 2px 2px;
+  text-decoration: none;
+  cursor: pointer;
+
+
+  &:hover {
+    color: $colorscheme;
+  }
+
+    a, small {
+      color: white;
+    }
+}
+
+
+.list{
+  list-style-type: none;
+  margin-bottom: 0;
+}
+
+ul {
+  margin-left: 0.5rem;
+}
+
+body {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.menu {
+  position:relative;
+  z-index: 99;
+  text-align: left;
+  display: inline;
+  padding: 15px 4px 17px 0;
+  list-style: none;
+  margin-left: 0;
+}
+ .menu .menuItem{
+   margin-left: 0;
+   display: inline-block;
+   margin-right: -4px;
+   position: relative;
+   padding: 15px 20px;
+   background: whitesmoke;
+   cursor: pointer;
+   -webkit-transition: all 0.2s;
+   -moz-transition: all 0.2s;
+   -ms-transition: all 0.2s;
+   -o-transition: all 0.2s;
+   transition: all 0.2s;
+  }
+.menu .menuItem:hover {
+  background: $colorscheme;
+  color: white;
+}
+
+.menu .menuItem .dropDown {
+  padding-bottom: 10px;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  margin-left: 0;
+  width: 150px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transiton: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -ms-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  -transition: opacity 0.2s;
+}
+
+.menu .menuItem .dropDown .dropDownItem {
+  background: white;
+  display: block;
+  color: $colorscheme;
+  padding-left: 15px;
+}
+
+.menu .menuItem .dropDown .dropDownItem:hover {
+  background: white;
+  padding-left: 30px;
+}
+.menu .lastItem .dropDown {
+  left: -75px;
+  right: 0px;
+  margin-left: auto;
+  margin-right: 0;
+}
+.menu .menuItem:hover .dropDown {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}

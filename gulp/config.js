@@ -9,8 +9,10 @@ module.exports = {
     }
   },
   vendor: {
-    src: src + '/javascript/vendor/**/*',
-    dest: dest + '/js/vendor'
+    js: {src: src + '/javascript/vendor/**/*',
+         dest: dest + '/js/vendor'},
+    css: {src: src + '/css/vendor/**/*',
+          dest: dest + '/css/vendor'}
   },
   images: {
     src: src + "/images/**",
@@ -19,6 +21,10 @@ module.exports = {
   markup: {
     src: src + "/htdocs/**",
     dest: dest
+  },
+  css: {
+    src: src + "/css",
+    dest: dest + "/css"
   },
   browserify: {
     // A separate bundle will be generated for each

@@ -3,13 +3,18 @@
  * Created by sirmonkey on 4/11/15.
  */
 var ClientSessionController = require('./nephelin/ClientSessionController');
-var SidePanel = require('./nephelin/SidePanel');
+var mainpanel = require('./nephelin/mainpanel');
+var context = require('./nephelin/context');
+var menu = require('./nephelin/menu');
 
 $( document ).ready(function() {
     console.log('ClientSessionController starting!');
-    var csc = new ClientSessionController.csc('/NephelinServer');
-    ClientSessionController.addReceiver(SidePanel.sp);
+    var csc = new ClientSessionController.ClientSessionController('/NephelinServer');
+
+    csc.addReceiver(mainpanel.sp);
+    csc.addReceiver(context.Context);
+    csc.addReceiver(menu.Menu);
     csc.openConnection();
-    csc.buildComponents();
+    csc.build();
     console.log('ClientSessionController started!');
 });
