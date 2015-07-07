@@ -4,6 +4,7 @@
  */
 
 var images = {};
+var counter = 0;
 
 images['bg_grey'] = {'description':'Grey background texture',
                         'url':'images/bg_grey.png'};
@@ -12,11 +13,18 @@ images['bg_blue'] = {'description':'Blue background texture',
 images['bg_red'] = {'description':'Red background texture',
     'url':'images/bg_red.png'};
 
-function preload() {
-    for(var key in images) {
+
+function preload(callback) {
+    var keys = Object.keys(images);
+    for(var i = 0; i<keys.length; i+=1) {
+        var key = keys[i];
         var img = new Image();
         img.onload = function() {
-            console.log('Image loaded!');
+            counter +=1;
+            if (counter === keys.length) {
+                console.log("Finished Loading!");
+                callback();
+            }
         };
         img.src = images[key].url;
         images[key]['image'] = img;

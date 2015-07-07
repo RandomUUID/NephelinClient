@@ -10,14 +10,15 @@ var Assets = require('./nephelin/Assets');
 
 $( document ).ready(function() {
     console.log('ClientSessionController starting!');
-    Assets.preload();
+
     var csc = new ClientSessionController.ClientSessionController('/NephelinServer');
-
-
     csc.addReceiver(mainpanel.sp);
     csc.addReceiver(context.Context);
     csc.addReceiver(menu.Menu);
-    csc.openConnection();
-    csc.build();
+    function onLoadingDone() {
+        csc.openConnection();
+        csc.build();
+    }
+    Assets.preload(onLoadingDone);
     console.log('ClientSessionController started!');
 });
