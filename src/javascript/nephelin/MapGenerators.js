@@ -4,6 +4,7 @@
  */
 var Hexagon = require('./Hexagon');
 var HexagonAlgebra = require('./HexagonAlgebra');
+var Assets = require('./Assets');
 module.exports.oddRowMap =  function oddRowMap(columnSize, hexagonSideSize) {
     var map = {};
     var track = 0;
@@ -57,7 +58,7 @@ module.exports.normalMap =  function normalMap(columnSize, hexagonSideSize) {
             var coordinates = new HexagonAlgebra.Cube(x, y, z);
             var stopRandom = true;
             if (Math.floor(Math.random() * 2) === 0 || stopRandom) {
-                var hexagon = new Hexagon(coordinates, hexagonSideSize);
+                var hexagon = new Hexagon(coordinates, hexagonSideSize, Assets.images['bg_grey']);
                 hexagon.calcAltPoints(new HexagonAlgebra.Axial(0,0));
                 hex_count += 1;
                 map[coordinates]= hexagon;

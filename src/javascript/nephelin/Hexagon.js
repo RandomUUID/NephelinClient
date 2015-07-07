@@ -18,15 +18,13 @@ var HexagonAlgebra = require('./HexagonAlgebra');
  * @param {number} hexagonSideSize - Side length from the hexagon.
  */
 var Hexagon;
-Hexagon = function Hexagon(coordinate, hexagonSideSize) {
+Hexagon = function Hexagon(coordinate, hexagonSideSize, bgImage) {
     this.coordinate = coordinate;
     this.size = hexagonSideSize;
     this.center     = null;
     this.corners    = null;
     this.calcAltPoints(new HexagonAlgebra.Axial(0,0));
-
-    this.bgImg = new Image();
-    this.bgImg.src = "images/normal.png";
+    this.bgImg = bgImage.image;
     this.foregroundImg = null;
     this.bordersColor = ['black','black','black','black','black','black'];
     this.selected = false;
