@@ -9,8 +9,9 @@ var Hexagon = require('./Hexagon');
 var mapgen = require('./MapGenerators');
 var HexagonAlgebra = require('./HexagonAlgebra');
 var CanvasHelper = require('./CanvasHelper');
+var Assets = require('./Assets');
 var context = require('./context');
-var selectImg = 'images/selectedblue.png';
+var selectImg;
 
 //TODO: getCanvas from SidePanel
 var Board;
@@ -33,11 +34,11 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
     this.actions = {
         selectHexagon: function selectHexagon(hexagon) {
             if(typeof self.hexagonQueue[hexagon.coordinate] === 'undefined'){
-                hexagon.bgImg.src = selectImg;
+                hexagon.bgImg = selectImg || Assets.images['bg_grey'].image;
                 self.hexagonQueue[hexagon.coordinate] = hexagon;
             }
             else{
-                hexagon.bgImg.src = 'images/normal.png';
+                hexagon.bgImg = Assets.images['bg_grey'].image;
                 delete self.hexagonQueue[hexagon.coordinate];
             }
         }
@@ -92,10 +93,10 @@ function drawHexagonGrid(ctx, map, reference_point) {
 
 module.exports.changeSelect = function changeSelect(color) {
     if(color === "red") {
-        selectImg = 'images/selected.png';
+        selectImg = Assets.images['bg_red'].image;
     }
     if(color === "blue") {
-       selectImg = 'images/selectedblue.png';
+       selectImg = Assets.images['bg_blue'].image;
     }
 };
 
