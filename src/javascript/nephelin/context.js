@@ -7,7 +7,6 @@ var Context;
 var Messages = require('./Messages');
 
 Context = function Context(sendMessageFunc, socket) {
-    console.log("Context Menu initialised");
     this.send = sendMessageFunc;
     this.socket = socket;
     this.name = "context";
@@ -47,6 +46,7 @@ Context = function Context(sendMessageFunc, socket) {
         var Board = require('./Board');
         Board.changeSelect("blue");
     });
+    console.log(this.name + " started!");
 };
 
 Context.prototype.actions = {};

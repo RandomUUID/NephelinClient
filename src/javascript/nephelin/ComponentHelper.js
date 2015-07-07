@@ -14,15 +14,14 @@ ComponentBuilder.prototype.addReceiver             = function (receiver) {
 };
 ComponentBuilder.prototype.build = function build() {
     console.log("Components found: " + this.receivers.length);
+    var built = 0;
     for (var index = 0; index < this.receivers.length; index+=1) {
         var ComponentConstructor = this.receivers[index];
-        console.log("Nichts!")
-        console.log(this.self.send);
-        console.log(this.self.socket);
         var cmp        = new ComponentConstructor(this.self.send, this.self.socket);
         this.components[cmp.name] = cmp;
+        built += 1;
     }
-    console.log("Components build: " + this.components.length);
+    console.log("Components built: " + built);
     console.log("----------");
 };
 module.exports.ComponentBuilder = ComponentBuilder;

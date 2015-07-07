@@ -12,10 +12,10 @@ var MenuHelper = require('./MenuHelper');
 var Menu;
 Menu = function Menu(sendMessageFunc, socket) {
     var self = this;
-    console.log("Menu initialised");
     this.send = sendMessageFunc;
     this.socket      = socket;
     this.name      = "menu";
+    console.log(this.name + " started!");
 };
 
 Menu.prototype.actions = {};
@@ -69,7 +69,6 @@ Menu.prototype.actions.removeDropDownItem =
     }
 };
 Menu.prototype.init = function init() {
-    console.log("Foobar init");
     this.actions.addMenuItem("Game");
     this.actions.addDropDownItem("Game", "New Game", function(){
         alert("New Game started");
@@ -105,8 +104,6 @@ Menu.prototype.receive =  function receive(msg) {
                 break;
             case "init":
                 this.init();
-                console.log("Menu INIT!");
-                console.log("Menu INIT!");
                 break;
             default :
                 console.log(msg);

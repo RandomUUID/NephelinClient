@@ -17,7 +17,6 @@ function isClick(board, mousedown, mouseup) {
 
 var mainPanel;
 mainPanel = function mainPanel(sendMessageFunc, socket) {
-    console.log(Date.now() + " main started.");
     var self = this;
     this.send = sendMessageFunc;
     this.socket      = socket;
@@ -66,6 +65,7 @@ mainPanel = function mainPanel(sendMessageFunc, socket) {
             self.send(response);
         }
     };
+    console.log(this.name + " started!");
 };
 
 

@@ -24,21 +24,17 @@ ClientSessionController     = function ClientSessionController(contextpath) {
             console.log(msg);
         },
         wait: function wait(msg) {
-            console.log(Date.now() + " CMD: Waiting");
             self.send(Messages.newGame);
         },
         relay: function relay(msg) {
-            console.log('Begin Relay');
-            console.log(msg);
             var receiver = msg.receiver;
-            console.log('Relay to: ' + receiver);
             var cmp = self.ComponentBuilder.components[receiver];
             if (typeof cmp !== 'undefined') {
                 cmp.receive(msg);
             } else {
                 console.log('Receiver: ' + receiver + ' not found!');
+                console.log(msg);
             }
-            console.log('End Relay');
         }
     };
     this.ComponentBuilder = new ComponentHelper.ComponentBuilder(self);
@@ -52,7 +48,6 @@ ClientSessionController.prototype.sendLocal = function sendLocal(msg) {
     self.receive(msg);
 };
 ClientSessionController.prototype.receive = function receive(event) {
-    console.log(event);
     var msg        = JSON.parse(event.data);
     var command = this.commands[msg.command];
     if (command !== undefined) {
@@ -62,6 +57,7 @@ ClientSessionController.prototype.receive = function receive(event) {
         command(msg);
     } else {
         console.log("Error: Command not found!") ;
+        console.log(msg);
     }
 };
 ClientSessionController.prototype.addReceiver = function addReceiver(receiver) {
