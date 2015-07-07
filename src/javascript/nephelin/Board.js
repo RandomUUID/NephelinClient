@@ -69,8 +69,8 @@ Board =  function Board(columnSize, hexagonSideSize, mapType) {
             }
         },
         scroll: function scrollHandler(canvas, movement_vector) {
-            self.reference_point.q += movement_vector.q;
-            self.reference_point.r += movement_vector.r;
+            self.reference_point.q -= movement_vector.q;
+            self.reference_point.r -= movement_vector.r;
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             drawMap(canvas, self.map, self.reference_point);
             drawMap(canvas, self.hexagonQueue, self.reference_point);
