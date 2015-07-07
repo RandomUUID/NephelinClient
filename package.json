@@ -2,7 +2,7 @@
   "devDependencies": {
     "browser-sync": "2.6.4",
     "browserify": "~9.0.8",
-    "gulp": "~3.8.11",
+    "gulp": "~3.9.0",
     "gulp-changed": "~1.2.1",
     "gulp-concat": "~2.5.2",
     "gulp-filesize": "0.0.6",
